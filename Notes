@@ -1,0 +1,801 @@
+Selenium:
+Selenium is a free(open-source) automated testing framework used to automate web applications across different
+   browsers and platforms.
+We can use multiple programming languages like Java, C#, Python, etc to create Selenium Test Scripts.
+Testing done using the Selenium testing tool is usually referred to as Selenium Testing.
+Unlike Selenium RC, it does not rely on JavaScript for Selenium Automation Testing.
+It controls the browser by directly communicating with it.
+Selenium was created by Jason Huggins in 2004, an engineer at ThoughtWorks.
+------------------------------------------------------------------------------------------------------------------
+Selenium Software is not just a single tool but a suite of software.
+Each piece catering to different Selenium QA testing needs of an organization.
+Here is the list of tools:
+   1. Selenium Integrated Development Environment (IDE)
+   2. Selenium Remote Control (RC)
+   3. WebDriver
+   4. Selenium Grid
+------------------------------------------------------------------------------------------------------------------
+Why the Name Selenium:
+The Name Selenium came from a joke that Jason cracked once to his team.
+During Selenium’s development, another automated testing framework was popular made by the company called
+   Mercury Interactive (yes, the company who originally made QTP before it was acquired by HP).
+Since Selenium is a well-known antidote for Mercury poisoning, Jason suggested that name and his teammates took it.
+So that is how we got to call this framework up to the present.
+------------------------------------------------------------------------------------------------------------------
+How selenium performs automation testing on browsers:
+Since selenium supports multiple languages such as Java, Python etc, we can develop automation scripts in all the
+   supported languages. This is known as language binding or Client binding.
+When we execute the selenium code, request goes to the Selenium Standalone Server(Selenium WebDriver Server),
+   which further process the request on the respective browsers using the browser specific driver executables.
+Driver Executables used a protocol called JSON Wire protocol to communicate with related browsers.
+   (JSON- JavaScript Object Notation).
+------------------------------------------------------------------------------------------------------------------
+Selenium Java Architecture:
+SearchContext:
+SearchContext is the super most interface present in selenium WebDriver.
+This interface contains two methods:
+   1. findElement(By by):
+      return type WebElement.
+      Find the first WebElement using the given method.
+   2. findElements(By by):
+      return type java.util.List.
+      Find all elements within the current page using the given mechanism
+
+WebDriver:
+WebDriver interface extends SearchContext interface.
+It contains 13 methods:
+   1. close():
+      return type void.
+      Close the current window, quitting the browser if it's the last window currently open.
+   2. get(String url):
+      return type void.
+      Load a new web page in the current browser window.
+   3. getCurrentUrl():
+      return type java.lang.String.
+      Get a string representing the current URL that the browser is looking at.
+   4. getPageSource():
+      return type java.lang.String.
+      Get the source of the last loaded page.
+   5. getTitle():
+      return type java.lang.String.
+      Get the title of the current page.
+   6. getWindowHandle():
+      return type java.lang.String.
+      Return an opaque handle to this window that uniquely identifies it within this driver instance.
+   7. getWindowHandles():
+      return type java.util.Set<java.lang.String>
+      Return a set of window handles which can be used to iterate over all open windows of this WebDriver
+         instance by passing them to switchTo().WebDriver.Options.window().
+   8. manage():
+      return type WebDriver.Options
+      Gets the Option interface
+   9. navigate():
+      return type WebDriver.Navigation
+      An abstraction allowing the driver to access the browser's history and to navigate to a given URL.
+   10. quit():
+      return type void.
+      Quits this driver, closing every associated window.
+   11. switchTo():
+      return type WebDriver.TargetLocator
+      Send future commands to a different frame or window.
+
+RemoteWebDriver:
+A total of 13 methods are available in selenium, which is implemented by super most class called
+   RemoteWebDriver.
+RemoteWebDriver also implements TakesScreenshot(I) and JavaScriptExecutor(I).
+RemoteWebDriver is again extended by child classes such as FirefoxDriver, ChromeDriver, InternetExplorerDriver
+   etc.
+
+TakesScreenshot:
+TakesScreenshot interface contain only one method
+   1. getScreenshotAs(OutputType<X> target):
+      return type X.
+      Capture the screenshot and store it in the specified location.
+
+JavaScriptExecutor:
+JavaScriptExecutor interface contains two methods:
+   1.executeScript():
+   return type can be boolean, long, java.lang.String, java.util.List, WebElement.
+   used to execute JavaScript.
+   2.executeAsyncScript()-> we don't use this for automation.
+------------------------------------------------------------------------------------------------------------------
+Desired Capabilities:
+When we install a browser for the first time and open the window it will not have any pre-defined configurations.
+It will not have any plug-ins installed or any certificate acceptance or zoom level set to 100%(all the
+   properties will be set to default).
+Over the time we make changes to the browser.
+When we launch the browser through automation, all the changes that we made to the browser will not be reflected
+   to it.
+So to reflect these changes into the browser we use DesiredCapabilities class in Selenium.
+Later, Selenium is provided only basic configuration.
+Rest of the configurations is provided by browser itself(if we use chrome, chrome driver will provide these
+   configurations).
+Therefore, every driver class is providing Options class(ChromeOptions, FirefoxOptions etc).
+If we want to open incognito window or want to open browser in maximize mode we cannot achieve this through
+   DesiredCapabilities(We use options here).
+We can merge DesiredCapabilities and Options to get all the configurations.
+   Example:
+   package com.seleniumPractice;
+   public class DesiredCapabilitiesDemo {
+      public static void main(String[] args) {
+         WebDriverManager.chromedriver().setup();
+         DesiredCapabilities capability = new DesiredCapabilities();
+         capability.setAcceptInsecureCerts(true);
+         ChromeOptions options = new ChromeOptions();
+         options.addArguments("--start-maximized");
+         options.merge(capability);
+         WebDriver driver = new ChromeDriver(options);
+         driver.get("http://www.cacert.com");
+      }
+   }
+------------------------------------------------------------------------------------------------------------------
+Locators in Selenium:
+Locators are the identification properties by which an element can be uniquely identified in the we page.
+There are 8 locators in Selenium:
+   1. id
+   2. name
+   3. className
+   4. linkText
+   5. partialLinkText
+   6. tagName
+   7. xPath
+   8. cssSelector
+------------------------------------------------------------------------------------------------------------------
+Navigation Methods:
+WebDriver provides some basic Browser Navigation Commands that allows the browser to move backwards or forwards
+   in the browser's history.
+1. to():
+In WebDriver, this method loads a new web page in the existing browser window.
+It accepts String as parameter and returns void.
+driver.navigate().to(String url);
+2. forward():
+In WebDriver, this method enables the web browser to click on the forward button in the existing browser window.
+It neither accepts anything nor returns anything.
+driver.navigate().forward();
+3. back():
+In WebDriver, this method enables the web browser to click on the back button in the existing browser window.
+It neither accepts anything nor returns anything.
+driver.navigate().back();
+4. refresh():
+In WebDriver, this method refresh/reloads the current web page in the existing browser window.
+It neither accepts anything nor returns anything.
+driver.navigate().refresh();
+   Example:
+   package com.seleniumPractice;
+   public class NavigationalMethods {
+      public static void main(String[] args) throws InterruptedException {
+         WebDriverManager.chromedriver().setup();
+         WebDriver driver = new ChromeDriver();
+         driver.get("https://www.google.com");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+         driver.findElement(By.xpath("//textarea[@id='APjFqb']"))
+            .sendKeys("HYR Tutorials", Keys.ENTER);
+         driver.navigate().to("https://www.facebook.com/");
+         driver.findElement(By.xpath("//input[@id='email']"))
+            .sendKeys("Shubhanshu Dubey");
+         Thread.sleep(5000);
+         driver.navigate().refresh();
+         driver.navigate().back();
+         driver.navigate().forward();
+         driver.quit();
+         System.out.println("passed");
+      }
+   }
+
+Difference between navigation() and get():
+1. driver.get() is used to navigate particular URL(website) and wait till page load.
+2. driver.navigate() is used to navigate to particular URL and does not wait to page load.
+It maintains browser history or cookies to navigate back or forward.
+------------------------------------------------------------------------------------------------------------------
+Basic Controls:
+   1. Text Box
+   2. Radio Button
+   3. Check Box
+   4. Button
+   5. Hyper link
+   Example:
+   package com.seleniumPractice;
+   public class BasicControls {
+      public static void main(String[] args) throws InterruptedException {
+         WebDriverManager.chromedriver().setup();
+         WebDriver driver = new ChromeDriver();
+         driver.get("https://www.hyrtutorials.com/p/basic-controls.html");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+         driver.findElement(By.id("firstName")).sendKeys("Ishani");
+         driver.findElement(By.id("lastName")).sendKeys("Tiwari");
+         driver.findElement(By.id("femalerb")).click();
+         driver.findElement(By.id("englishchbx")).click();
+         driver.findElement(By.id("hindichbx")).click();
+         driver.findElement(By.id("email")).sendKeys("ishani.1234@gmail.com");
+         driver.findElement(By.id("password")).sendKeys("abcdefgh");
+         driver.findElement(By.id("registerbtn")).click();
+         driver.quit();
+         System.out.println("passed");
+      }
+   }
+------------------------------------------------------------------------------------------------------------------
+Alert in Selenium:
+An Alert in Selenium is a small message box which appears on screen to give the user some information or
+   notification.
+It notifies the user with some specific information or error, asks for permission to perform certain tasks and it
+   also provides warning messages as well.
+This alert box blocks the user to perform further actions, that is why it has to be handled first in order to
+   perform further actions.
+These alerts are part of browsers,that is why we can switch to it, unlike file upload popup.
+To handle this alerts we use Alert class methods.
+   Alert alert = driver.switchTo().alert().
+Types of Alert in Selenium:
+   1. Simple Alert
+      The simple alert class in Selenium displays some information or warning on the screen.
+      Example:
+      package alerts;
+      public class SimpleAlertDemo {
+         public static void main(String[] args) {
+            WebDriverManager.chromedriver().setup();
+            WebDriver driver = new ChromeDriver();
+            driver.get("https://www.hyrtutorials.com/p/alertsdemo.html");
+            driver.manage().window().maximize();
+            driver.manage().deleteAllCookies();
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+            driver.findElement(By.xpath("//button[@id='alertBox']")).click();
+            Alert alert = driver.switchTo().alert();
+            String alertText = alert.getText();
+            System.out.println(alertText);
+            alert.accept();
+            driver.quit();
+            System.out.println("passed");
+         }
+      }
+   2. Prompt Alert
+      This Prompt Alert asks some input from the user and Selenium WebDriver can enter the text using
+      sendKeys(” input…. “).
+      Example:
+      package alerts;
+      public class PromptAlertDemo {
+         public static void main(String[] args) {
+            WebDriverManager.chromedriver().setup();
+            WebDriver driver = new ChromeDriver();
+            driver.get("https://www.hyrtutorials.com/p/alertsdemo.html");
+            driver.manage().window().maximize();
+            driver.manage().deleteAllCookies();
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+            driver.findElement(By.xpath("//button[@id='promptBox']")).click();
+            Alert alert = driver.switchTo().alert();
+            String alertText = alert.getText();
+            System.out.println(alertText);
+            alert.sendKeys("Shubhanshu Dubey");
+            alert.accept();
+            driver.quit();
+            System.out.println("passed");
+         }
+      }
+   3. Confirmation Alert
+      This confirmation alert asks permission to do some type of operation.
+      Example:
+      package alerts;
+      public class ConfirmationAlertDemo {
+         public static void main(String[] args) {
+            WebDriverManager.chromedriver().setup();
+            WebDriver driver = new ChromeDriver();
+            driver.get("https://demo.guru99.com/test/delete_customer.php");
+            driver.manage().window().maximize();
+            driver.manage().deleteAllCookies();
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+            driver.findElement(By.xpath("//input[@name='submit']")).click();
+            Alert alert = driver.switchTo().alert();
+            String alertText = alert.getText();
+            System.out.println(alertText);
+            alert.accept();
+            String nextAlertText = alert.getText();
+            System.out.println(nextAlertText);
+            alert.accept();
+            driver.quit();
+            System.out.println("passed");
+         }
+      }
+------------------------------------------------------------------------------------------------------------------
+Upload file in selenium:
+Uploading files in WebDriver is done by simply using the sendKeys() method on the file-select input field to
+   enter the path to the file to be uploaded.
+The file upload popup is part of window but not of browser.
+That is why Selenium cannot browse through windows(C: driver or D: drive).
+No need to click on browse button otherwise window popup will be opened.
+This will work only when browse button has attribute type="file".
+   Example:
+   package com.seleniumPractice;
+   public class HandleFileUploadPopUp {
+      public static void main(String[] args) {
+         WebDriverManager.chromedriver().setup();
+         WebDriver driver = new ChromeDriver();
+         driver.get("https://demo.guru99.com/test/upload/");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+         driver.findElement(By.xpath("//input[@id='uploadfile_0']"))
+            .sendKeys("C:\\Users\\Ishani\\Desktop");
+         driver.findElement(By.xpath("//input[@id='terms']")).click();
+         driver.findElement(By.xpath("//button[@id='submitbutton']")).click();
+         driver.quit();
+         System.out.println("passed");
+      }
+   }
+------------------------------------------------------------------------------------------------------------------
+iFrame in Selenium WebDriver:
+iFrame in Selenium WebDriver is a web page or an inline frame which is embedded in another web page or an HTML
+   document embedded inside another HTML document.
+The iframe is often used to add content from other sources like an advertisement into a web page.
+The iframe is defined with the <iframe> tag.
+To switch the control to frame
+   driver.switchTo().frame();
+   Example 1:
+   package iFrame;
+   public class FrameHandle {
+      public static void main(String[] args) {
+         WebDriverManager.chromedriver().setup();
+         WebDriver driver = new ChromeDriver();
+         driver.get("https://www.hyrtutorials.com/p/frames-practice.html");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+         driver.findElement(By.xpath("//input[@id='name']")).sendKeys("Hello");
+         //switch to frame 1
+         driver.switchTo().frame(driver.findElement(By.id("frm1")));
+         Select courseDropdown = new Select(driver.findElement(By.id("course")));
+         courseDropdown.selectByVisibleText("Java");
+         //switch back to main web page
+         driver.switchTo().defaultContent();
+         driver.findElement(By.xpath("//input[@id='name']")).sendKeys("World");
+         driver.quit();
+         System.out.println("passed");
+      }
+   }
+   Example 2:
+   package iFrame;
+   public class NestedFrameHandle {
+      public static void main(String[] args) {
+         WebDriverManager.chromedriver().setup();
+         WebDriver driver = new ChromeDriver();
+         driver.get("https://www.hyrtutorials.com/p/frames-practice.html");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+         driver.findElement(By.xpath("//input[@id='name']")).sendKeys("Hello");
+         //switch to frame 3
+         driver.switchTo().frame(driver.findElement(By.id("frm3")));
+         driver.findElement(By.xpath("//input[@id='name']")).sendKeys("Hello");
+         //switch to frame 1 present inside frame 3
+         driver.switchTo().frame(driver.findElement(By.id("frm1")));
+         Select courseDropdown = new Select(driver.findElement(By.id("course")));
+         courseDropdown.selectByVisibleText("Java");
+         //switch bach to parent frame i.e. frame 3
+         driver.switchTo().parentFrame();
+         driver.findElement(By.xpath("//input[@id='name']")).sendKeys("World");
+         //switch back to main web page
+         driver.switchTo().defaultContent();
+         driver.findElement(By.xpath("//input[@id='name']")).sendKeys("World");
+         driver.quit();
+         System.out.println("passed");
+      }
+   }
+------------------------------------------------------------------------------------------------------------------
+Mouse Movement in Selenium:
+To handle mouse movements in selenium we use Actions class.
+Using Actions class methods we can handle mouse movements.
+Actions action = new Actions(WebDriver driver);
+Various mouse movements example- Drag & Drop, mouse hover.
+   Example 1:
+   package mouseMovement;
+   public class DragAndDropExample {
+      public static void main(String[] args) {
+         WebDriverManager.chromedriver().setup();
+         WebDriver driver = new ChromeDriver();
+         driver.get("https://www.globalsqa.com/demo-site/draganddrop/");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+         driver.switchTo().frame(driver.findElement(By.xpath("//iframe[@class='demo-frame lazyloaded']")));
+         Actions action = new Actions(driver);
+         WebElement elementToBeDragged = driver.findElement(By.xpath("//ul[@id='gallery']//" +
+            "child::li//child::h5[text()='High Tatras']"));
+         WebElement elementDestination = driver.findElement(By.xpath("//div[@id='trash']"));
+         action.clickAndHold(elementToBeDragged).moveToElement(elementDestination).release()
+            .build().perform();
+         driver.quit();
+         System.out.println("passed");
+      }
+   }
+   Example 2:
+   package mouseMovement;
+   public class MouseMovementExample {
+      public static void main(String[] args) {
+         WebDriverManager.chromedriver().setup();
+         WebDriver driver = new ChromeDriver();
+         driver.get("https://phptravels.com/demo/");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+         Actions action = new Actions(driver);
+         WebElement hoveredElement = driver.findElement(By.xpath("//div[@class='nav_left']//child::ul//child::li" +
+            "//child::div//child::span[contains(text(),'Product')]"));
+         WebElement elementToBeClicked = driver.findElement(By.xpath("//a[contains(text(),'Customizations') and " +
+            "@class='arrow waves-effect']"));
+         action.moveToElement(hoveredElement).build().perform();
+         elementToBeClicked.click();
+         driver.quit();
+         System.out.println("passed");
+      }
+   }
+-----------------------------------------------------------------------------------------------------------------
+Screenshot:
+For taking screenshot we use TakesScreenshot interface.
+We cast driver into TakesScreenshot type.
+   TakesScreenshot t = (TakesScreenshot) driver;
+By using getScreenshotAs(), we can take screenshot where ever we want.
+   Example:
+   package com.seleniumPractice;
+   public class ScreenshotDemo {
+      public static void main(String[] args) throws IOException {
+         WebDriverManager.chromedriver().setup();
+         WebDriver driver = new ChromeDriver();
+         driver.get("https://www.google.com");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+         TakesScreenshot takesScreenshot = (TakesScreenshot) driver;
+
+         //Three ways of taking screenshot
+         //1. Here Output type is File
+         File file = takesScreenshot.getScreenshotAs(OutputType.FILE);
+         FileUtils.copyFile(file, new File("./Screenshots/Image1.png"));
+         System.out.println("passed");
+
+         //2. Output type is byte64
+         String base64Code = takesScreenshot.getScreenshotAs(OutputType.BASE64);
+         //We have to convert this file into byte[]- for this we use Base64 class
+         //Base64 class is Available in java
+         byte[] byteArray = Base64.getDecoder().decode(base64Code);
+         FileOutputStream fos1 = new FileOutputStream("./Screenshots/Image2.jpeg");
+         fos1.write(byteArray);
+         fos1.close();
+         System.out.println("passed");
+
+         //3. Output type is bytes
+         byte[] byteArr = takesScreenshot.getScreenshotAs(OutputType.BYTES);
+         FileOutputStream fos2 = new FileOutputStream("./Screenshots/Image3.jpg");
+         fos2.write(byteArr);
+         fos2.close();
+         System.out.println("passed");
+
+         //For taking screenshot we should create a separate method in Utility class.
+         //Taking screenshot using Utility class
+         Utility.captureScreenshot(driver, "Img.png");
+         driver.quit();
+         System.out.println("passed");
+      }
+   }
+   Utility class:
+   package com.seleniumPractice;
+   public class Utility {
+      public static void captureScreenshot(WebDriver driver, String fileName) throws IOException {
+         TakesScreenshot takesScreenshot = (TakesScreenshot) driver;
+         File file = takesScreenshot.getScreenshotAs(OutputType.FILE);
+         FileUtils.copyFile(file, new File("./Screenshots/" + fileName));
+      }
+   }
+------------------------------------------------------------------------------------------------------------------
+Handle Window Pop up:
+If a new tab(or multiple tabs) or new window(or multiple windows) is opened by clicking a button, to handle this
+   window pop up selenium WebDriver has two methods called getWindowHandle() and getWindowHandles().
+Every window or tab has a unique handle(String type).
+To handle different windows or tabs we use window handles.
+To get the window handles we use getWindowHandle() and getWindowHandles() methods.
+To perform operations on new window or tab we have to switch to new tab or new window by using the command:
+   driver.switchTo().window(String handle).
+If multiple window or multiple tabs are opened by clicking a button, same methods will be used to handle them.
+   Example 1:
+   package windowHandles;
+   public class HandleNewTab {
+      public static void main(String[] args) throws InterruptedException {
+         WebDriverManager.chromedriver().setup();
+         WebDriver driver = new ChromeDriver();
+         driver.get("https://www.hyrtutorials.com/p/window-handles-practice.html");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+         String parentHandle = driver.getWindowHandle();
+         driver.findElement(By.xpath("//button[@id='newTabBtn']")).click();
+         Set<String> handles = driver.getWindowHandles();
+         for(String handle: handles) {
+            if(!handle.equals(parentHandle)) {
+               driver.switchTo().window(handle);
+               driver.findElement(By.id("alertBox")).click();
+               Alert alert = driver.switchTo().alert();
+               System.out.println(alert.getText());
+               alert.accept();
+               driver.close();
+            }
+         }
+         driver.switchTo().window(parentHandle);
+         driver.findElement(By.xpath("//input[@id='name']")).sendKeys("Shubhanshu Dubey");
+         Thread.sleep(5000);
+         driver.quit();
+         System.out.println("passed");
+      }
+   }
+   Example 2:
+   package windowHandles;
+   public class HandleNewWindow {
+      public static void main(String[] args) throws InterruptedException {
+         WebDriverManager.chromedriver().setup();
+         WebDriver driver = new ChromeDriver();
+         driver.get("https://www.hyrtutorials.com/p/window-handles-practice.html");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+         String parentHandle = driver.getWindowHandle();
+         driver.findElement(By.xpath("//button[@id='newWindowBtn']")).click();
+         Set<String> handles = driver.getWindowHandles();
+         for(String handle: handles) {
+            if(!handle.equals(parentHandle)) {
+               driver.switchTo().window(handle);
+               driver.findElement(By.xpath("//input[@id='firstName']"))
+                  .sendKeys("Shubhanshu");
+               Thread.sleep(5000);
+               driver.close();
+            }
+         }
+         driver.switchTo().window(parentHandle);
+         driver.findElement(By.xpath("//input[@id='name']")).sendKeys("Dubey");
+         driver.quit();
+         System.out.println("passed");
+      }
+   }
+-----------------------------------------------------------------------------------------------------------------
+Handle Dropdown:
+Dropdown is a HTML controls which provide multiple options for users to select.
+This HTML dropdown always present inside select tag containing option tag as child which contains a value
+   attribute.
+To select the options from the dropdowns Selenium provide Select class(we have to create Select class instance).
+   Select select = new Select(WebElement element); --->  element is dropdown element.
+To select there are 3 methods:
+   1. selectByIndex(int index).
+   2. selectByValue(String value).
+   3. selectByVisibleText(String text).
+Two types of Dropdowns
+   1. Single Selection:
+   User can select only one option.
+   Example:
+   package dropdowns;
+   public class HandleSingleSelectionDropdown {
+      public static void main(String[] args) throws InterruptedException {
+         WebDriverManager.chromedriver().setup();
+         WebDriver driver = new ChromeDriver();
+         driver.get("https://www.hyrtutorials.com/p/html-dropdown-elements-practice.html");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+         //handling single selection drop down
+         WebElement courseNameElement = driver.findElement(By.xpath("//select[@id='course']"));
+         Select courseNameDropDown = new Select(courseNameElement);
+         courseNameDropDown.selectByIndex(1);
+         Thread.sleep(5000);
+         courseNameDropDown.selectByValue("net");
+         Thread.sleep(5000);
+         courseNameDropDown.selectByVisibleText("Python");
+         Thread.sleep(5000);
+         driver.quit();
+         System.out.println("passed");
+      }
+   }
+   2. Multi Selection:
+   User can select more than one option.
+   Example:
+   package dropdowns;
+   public class HandleMultiSelectionDropDown {
+      public static void main(String[] args) throws InterruptedException {
+         WebDriverManager.chromedriver().setup();
+         WebDriver driver = new ChromeDriver();
+         driver.get("https://www.hyrtutorials.com/p/html-dropdown-elements-practice.html");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+         //handling multi selection drop down
+         WebElement ideNameElement = driver.findElement(By.xpath("//select[@id='ide']"));
+         Select ideNameDropDown = new Select(ideNameElement);
+         ideNameDropDown.selectByIndex(1);
+         Thread.sleep(5000);
+         ideNameDropDown.selectByValue("nb");
+         Thread.sleep(5000);
+         ideNameDropDown.selectByVisibleText("Visual Studio");
+         Thread.sleep(5000);
+         driver.quit();
+         System.out.println("passed");
+      }
+   }
+
+We can also deselect already selected options.
+To deselect there are 4 methods:
+   1. deselectAll().
+   2. deselectByIndex(int index).
+   3. deselectByValue(String value).
+   4. deselectByVisibleText(String text).
+   Example:
+   package dropdowns;
+   public class DeselectDropDownOptions {
+      public static void main(String[] args) throws InterruptedException {
+         WebDriverManager.chromedriver().setup();
+         WebDriver driver = new ChromeDriver();
+         driver.get("https://www.hyrtutorials.com/p/html-dropdown-elements-practice.html");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+         WebElement ideNameElement = driver.findElement(By.xpath("//select[@id='ide']"));
+         Select ideNameDropDown = new Select(ideNameElement);
+         ideNameDropDown.selectByIndex(1);
+         Thread.sleep(5000);
+         ideNameDropDown.selectByValue("nb");
+         Thread.sleep(5000);
+         ideNameDropDown.selectByVisibleText("Visual Studio");
+         Thread.sleep(5000);
+         //Deselecting drop down options
+         ideNameDropDown.deselectByIndex(1);
+         Thread.sleep(5000);
+         ideNameDropDown.deselectByValue("nb");
+         Thread.sleep(5000);
+         ideNameDropDown.deselectByVisibleText("Visual Studio");
+         Thread.sleep(5000);
+         driver.quit();
+         System.out.println("passed");
+      }
+   }
+
+To get the options from the Dropdowns:
+For this there are 3 methods:
+   1. getOptions(): return type List<WebElement>
+   2. getAllSelectedOptions(): return type List<WebElement>
+   3. getFirstSelectedOption(): return WebElement
+   package dropdowns;
+   public class GetOptionsFromDropDown {
+      public static void main(String[] args) throws InterruptedException {
+         WebDriverManager.chromedriver().setup();
+         WebDriver driver = new ChromeDriver();
+         driver.get("https://www.hyrtutorials.com/p/html-dropdown-elements-practice.html");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+         WebElement courseNameElement = driver.findElement(By.xpath("//select[@id='course']"));
+         Select courseNameDropDown = new Select(courseNameElement);
+         List<WebElement> courseAvailable = courseNameDropDown.getOptions();
+         System.out.println("Courses Available:");
+         for(WebElement element: courseAvailable) {
+            System.out.println(element.getText());// print all the courses available
+         }
+         courseNameDropDown.selectByIndex(1);
+         courseNameDropDown.selectByValue("net");
+         courseNameDropDown.selectByVisibleText("Python");
+         //prints first selected option
+         System.out.println("First selected option is:");
+         System.out.println(courseNameDropDown.getFirstSelectedOption().getText());
+         //prints all selected options
+         WebElement ideNameElement = driver.findElement(By.xpath("//select[@id='ide']"));
+         Select ideNameDropDown = new Select(ideNameElement);
+         ideNameDropDown.selectByIndex(1);
+         Thread.sleep(5000);
+         ideNameDropDown.selectByValue("nb");
+         Thread.sleep(5000);
+         List<WebElement> ideSelected = ideNameDropDown.getAllSelectedOptions();
+         System.out.println("Selected options are:");
+         for(WebElement element: ideSelected) {
+            System.out.println(element.getText());
+         }
+         driver.quit();
+         System.out.println("passed");
+      }
+   }
+------------------------------------------------------------------------------------------------------------------
+Bootstrap Dropdown:
+------------------------------------------------------------------------------------------------------------------
+Permission Pop-ups:
+------------------------------------------------------------------------------------------------------------------
+Removing Notification "Chrome is being controlled by automated software":
+It is not an HTML-based notification but browser based notification, so we can not inspect it.
+We have to use Options class(we can't use Capabilities here because this notification is specific to the browser).
+   Example:
+   package com.seleniumPractice;
+   public class RemoveNotification {
+      public static void main(String[] args) {
+         WebDriverManager.chromedriver().setup();
+         ChromeOptions options = new ChromeOptions();
+         //Many ways to do this
+         //we can pass String[] object or Collections object
+         options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});//1
+         options.setExperimentalOption("excludeSwitches", Arrays.asList("enable-automation"));//2
+         options.setExperimentalOption("excludeSwitches", Collections.singleton("enable-automation"));//3
+         options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));//4
+         //5
+         List<String> eSwitches = new ArrayList<>();
+         eSwitches.add("enable-automation");
+         options.setExperimentalOption("excludeSwitches", eSwitches);
+         options.setExperimentalOption("useAutomationExtension", false);//6
+         WebDriver driver = new ChromeDriver(options);
+         driver.get("https://www.google.com");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+      }
+   }
+------------------------------------------------------------------------------------------------------------------
+Calendars:
+------------------------------------------------------------------------------------------------------------------
+Broken Links:
+The links in a web page which is no longer accessible or exist.
+The reason could be the web page is removed from the application or is moved somewhere else but the link are not
+   updated yet.
+The broken links can only be identified by the response(response message or code) we get from the server when
+   we send the request to the server.
+When proxy is setup in the real-time projects, we cannot identify the broken links, so we use Proxy class to
+   identify the broken links.
+   Example:
+   package com.seleniumPractice;
+   public class BrokenLinks {
+      public static void main(String[] args) throws Exception {
+         WebDriverManager.chromedriver().setup();
+         WebDriver driver = new ChromeDriver();
+         driver.get("https://www.hyrtutorials.com/");
+         driver.manage().window().maximize();
+         driver.manage().deleteAllCookies();
+         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+         List<WebElement> links = driver.findElements(By.tagName("a"));
+         System.out.println(links.size());
+         Set<String> brokenLinkUrls = new HashSet<>();
+         for(WebElement link: links) {
+            String linkURL = link.getAttribute("href");
+            Proxy proxy = new Proxy(java.net.Proxy.Type.HTTP, new InetSocketAddress("hostname", 8080));
+            URL url = new URL(linkURL);
+            URLConnection urlConnection = url.openConnection(proxy);
+            HttpURLConnection httpURLConnection = (HttpURLConnection)urlConnection;
+            httpURLConnection.setConnectTimeout(10000);
+            httpURLConnection.connect();
+            //Other than 200 url is invalid.
+            if(httpURLConnection.getResponseCode() != 200) {
+               brokenLinkUrls.add(linkURL);
+            }
+            httpURLConnection.disconnect();
+         }
+         driver.quit();
+         for (String brokenUrl: brokenLinkUrls) {
+            System.err.println(brokenUrl);
+         }
+      }
+   }
+
+Practice Websites:
+   http://www.deadlinkcity.com/
+   https://worldworstwebsite.com/
+------------------------------------------------------------------------------------------------------------------
+Broken images:
